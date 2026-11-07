@@ -1,0 +1,65 @@
+/* ============================================================
+   CineFlix — tema del panel de administración (estilo Netflix)
+   ============================================================ */
+:root, html[data-theme="light"], html[data-theme="dark"] {
+    --primary: #e50914;
+    --secondary: #141414;
+    --accent: #f6121d;
+    --primary-fg: #ffffff;
+    --header-bg: #141414;
+    --header-color: #ffffff;
+    --header-link-color: #ffffff;
+    --breadcrumbs-bg: #1f1f1f;
+    --breadcrumbs-fg: #ffffff;
+    --breadcrumbs-link-fg: #ffffff;
+    --link-fg: #e50914;
+    --link-hover-color: #f6121d;
+    --link-selected-fg: #b20710;
+    --button-bg: #e50914;
+    --button-fg: #ffffff;
+    --default-button-bg: #b20710;
+    --default-button-hover-bg: #e50914;
+    --object-tools-bg: #1f1f1f;
+    --object-tools-fg: #ffffff;
+    --selected-bg: #2a2a2a;
+    --darkened-bg: #1a1a1a;
+}
+
+body { font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; }
+
+#header {
+    background: #141414;
+    color: #fff;
+    border-bottom: 3px solid #e50914;
+}
+#branding h1, #site-name a { color: #e50914 !important; font-weight: 900; letter-spacing: 1px; }
+#site-name a span { color: #fff; }
+
+.module h2, .module caption, .inline-group h2 {
+    background: #141414;
+    color: #fff;
+}
+a:link, a:visited { color: #e50914; }
+a:hover { color: #f6121d; }
+
+.button, input[type="submit"], input[type="button"], .submit-row input {
+    background: #e50914;
+    color: #fff;
+}
+.button:hover, input[type="submit"]:hover, input[type="button"]:hover {
+    background: #f6121d;
+}
+.button.default, input[type="submit"].default, .submit-row input.default {
+    background: #b20710;
+}
+.button.default:hover { background: #e50914; }
+
+.object-tools a:link, .object-tools a:visited {
+    background: #e50914;
+    color: #fff;
+}
+.object-tools a:hover { background: #f6121d; }
+
+thead th, tfoot td { background: #141414; color: #fff; }
+tr:nth-child(even) { background: #f9f9f9; }
+tr.selected { background: #fff3f3; }

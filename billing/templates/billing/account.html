@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+
+{% block title %}CineFlix · Mi cuenta{% endblock %}
+
+{% block content %}
+<div class="page-wrap">
+    <div class="page-head" style="text-align:left;max-width:none;">
+        <h1>Mi cuenta</h1>
+        <p>{{ user.username }}{% if user.email %} · {{ user.email }}{% endif %}</p>
+    </div>
+
+    <div class="account-grid">
+        <div class="stat-card">
+            <h2>Estado de la suscripción</h2>
+            {% if subscription and subscription.is_vip %}
+                <span class="status-pill active">★ VIP activo</span>
+                <p style="margin-top:16px;color:var(--muted);">
+                    Plan <strong style="color:#fff;">{{ subscription.plan.name }}</strong><br>
+                    Válida hasta {{ subscription.current_period_end|date:"d/m/Y" }}
+                </p>
+            {% else %}
+                <span class="status-pill inactive">Sin VIP</span>
+                <p style="margin-top:16px;color:var(--muted);">
+                    Aún no tienes una suscripción VIP activa.
+                </p>
+                <a class="btn-vip" style="margin-top:18px;display:inline-block;" href="{% url 'billing:plans' %}">Hazte VIP</a>
+            {% endif %}
+        </div>
+
+        <div class="stat-card">
+            <h2>Historial de pagos</h2>
+            {% if payments %}
+            <table class="table">
+                <thead>
+                    <tr><th>Fecha</th><th>Plan</th><th>Importe</th><th>Estado</th></tr>
+                </thead>
+                <tbody>
+                    {% for p in payments %}
+                    <tr>
+                        <td>{{ p.created_at|date:"d/m/Y" }}</td>
+                        <td>{{ p.plan.name }}</td>
+                        <td>{{ p.amount }} {{ p.currency }}</td>
+                        <td>{% if p.status == "succeeded" %}<span class="tag-ok">Completado</span>{% else %}{{ p.get_status_display }}{% endif %}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% else %}
+            <p style="color:var(--muted);">Todavía no hay pagos registrados.</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

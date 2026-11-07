@@ -1,0 +1,29 @@
+{% for row in rows %}
+<section class="row-wrap">
+    <h2 class="row-title">{{ row.title }}</h2>
+    <button class="row-arrow left" aria-label="Anterior">‹</button>
+    <div class="row-track">
+        {% for movie in row.movies %}
+        <a class="tile" href="{{ movie.get_absolute_url }}">
+            <div class="tile-poster">
+                {% if movie.poster %}
+                    <img src="{{ movie.poster.url }}" alt="{{ movie.title }}" loading="lazy">
+                {% else %}
+                    <div class="no-poster">{{ movie.title|slice:":1" }}</div>
+                {% endif %}
+            </div>
+            <div class="tile-info">
+                <h3>{{ movie.title }}</h3>
+                <div class="tile-meta">
+                    {% if movie.rating %}<span class="match">★ {{ movie.rating }}</span>{% endif %}
+                    {% if movie.release_year %}<span>{{ movie.release_year }}</span>{% endif %}
+                    {% if movie.duration_minutes %}<span>{{ movie.duration_minutes }} min</span>{% endif %}
+                </div>
+                <span class="tile-play">▶ Reproducir</span>
+            </div>
+        </a>
+        {% endfor %}
+    </div>
+    <button class="row-arrow right" aria-label="Siguiente">›</button>
+</section>
+{% endfor %}

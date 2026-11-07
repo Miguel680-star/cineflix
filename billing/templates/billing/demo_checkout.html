@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+
+{% block title %}CineFlix · Pago{% endblock %}
+
+{% block content %}
+<div class="auth-wrap">
+    <div class="card-panel">
+        <span class="demo-badge">Modo demo · pago simulado</span>
+
+        <h1>Pago con tarjeta</h1>
+        <p class="sub">Estás contratando: <strong>{{ plan.name }}</strong></p>
+
+        <div class="card-visual">
+            <div class="card-chip"></div>
+            <div class="card-number">4242 4242 4242 4242</div>
+            <div class="card-bottom">
+                <span>{{ user.username|upper }}</span>
+                <span>12/30</span>
+            </div>
+        </div>
+
+        <p class="sub" style="margin-bottom:20px;">
+            Este formulario es una <strong>demostración</strong>: los datos de tarjeta están
+            deshabilitados y no se envían ni almacenan. En producción, el pago se realiza en
+            el formulario seguro alojado por Stripe.
+        </p>
+
+        <div class="card-row-2">
+            <div class="form-row">
+                <label>Número de tarjeta</label>
+                <input type="text" value="4242 4242 4242 4242" disabled>
+            </div>
+            <div class="form-row">
+                <label>Titular</label>
+                <input type="text" value="{{ user.username }}" disabled>
+            </div>
+        </div>
+        <div class="card-row-2">
+            <div class="form-row">
+                <label>Caducidad</label>
+                <input type="text" value="12 / 30" disabled>
+            </div>
+            <div class="form-row">
+                <label>CVC</label>
+                <input type="text" value="123" disabled>
+            </div>
+        </div>
+
+        <div class="summary-line"><span>Plan</span><span>{{ plan.name }}</span></div>
+        <div class="summary-line"><span>Periodo</span><span>{{ plan.interval_days }} días</span></div>
+        <div class="summary-line total"><span>Total</span><span>{{ plan.price_display }}</span></div>
+
+        <form method="post" class="form-actions">
+            {% csrf_token %}
+            <button type="submit" class="btn-vip">Pagar {{ plan.price_display }} (simulado)</button>
+        </form>
+
+        <p class="form-foot"><a href="{% url 'billing:plans' %}">‹ Volver a los planes</a></p>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+
+{% block title %}CineFlix{% endblock %}
+
+{% block billboard %}
+{% if is_browse and billboard %}
+<section class="billboard"
+    {% if billboard.backdrop %}style="background-image:url('{{ billboard.backdrop.url }}');"{% endif %}>
+    <div class="billboard-fade"></div>
+    <div class="billboard-content">
+        <span class="billboard-brand">N</span>
+        <h1 class="billboard-title">{{ billboard.title }}</h1>
+        <div class="billboard-meta">
+            {% if billboard.rating %}<span class="match">★ {{ billboard.rating }}</span>{% endif %}
+            {% if billboard.release_year %}<span>{{ billboard.release_year }}</span>{% endif %}
+            {% if billboard.duration_minutes %}<span>{{ billboard.duration_minutes }} min</span>{% endif %}
+            <span class="tag-cc">Contenido con derechos</span>
+        </div>
+        <p class="billboard-synopsis">{{ billboard.synopsis|truncatewords:32 }}</p>
+        <div class="billboard-actions">
+            <a class="btn btn-play" href="{{ billboard.get_absolute_url }}">▶ Reproducir</a>
+            <a class="btn btn-info" href="{{ billboard.get_absolute_url }}">ⓘ Más información</a>
+        </div>
+    </div>
+</section>
+{% endif %}
+{% endblock %}
+
+{% block main_class %}{% if is_browse %}main main-overlap{% else %}main{% endif %}{% endblock %}
+
+{% block content %}
+{% if is_browse %}
+
+    {% include "catalog/_row.html" %}
+
+{% else %}
+    <nav class="genres">
+        <a href="{% url 'catalog:movie_list' %}" class="{% if not active_genre %}active{% endif %}">Todas</a>
+        {% for genre in genres %}
+            <a href="?genre={{ genre.slug }}" class="{% if active_genre == genre.slug %}active{% endif %}">{{ genre.name }}</a>
+        {% endfor %}
+    </nav>
+
+    {% if search %}
+        <p class="results-info">Resultados para «{{ search }}»</p>
+    {% endif %}
+
+    {% if movies %}
+    <div class="grid">
+        {% for movie in movies %}
+        <a class="tile" href="{{ movie.get_absolute_url }}">
+            <div class="tile-poster">
+                {% if movie.poster %}
+                    <img src="{{ movie.poster.url }}" alt="{{ movie.title }}" loading="lazy">
+                {% else %}
+                    <div class="no-poster">{{ movie.title|slice:":1" }}</div>
+                {% endif %}
+            </div>
+            <div class="tile-info">
+                <h3>{{ movie.title }}</h3>
+                <div class="tile-meta">
+                    {% if movie.rating %}<span class="match">★ {{ movie.rating }}</span>{% endif %}
+                    {% if movie.release_year %}<span>{{ movie.release_year }}</span>{% endif %}
+                </div>
+                <span class="tile-play">▶ Reproducir</span>
+            </div>
+        </a>
+        {% endfor %}
+    </div>
+
+    {% if is_paginated %}
+    <div class="pagination">
+        {% if page_obj.has_previous %}
+            <a href="?page={{ page_obj.previous_page_number }}{% if search %}&q={{ search }}{% endif %}{% if active_genre %}&genre={{ active_genre }}{% endif %}">‹ Anterior</a>
+        {% endif %}
+        <span>Página {{ page_obj.number }} de {{ page_obj.paginator.num_pages }}</span>
+        {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}{% if search %}&q={{ search }}{% endif %}{% if active_genre %}&genre={{ active_genre }}{% endif %}">Siguiente ›</a>
+        {% endif %}
+    </div>
+    {% endif %}
+
+    {% else %}
+    <p class="empty">No hay películas que mostrar. Añádelas desde el <a href="/admin/">panel de administración</a>.</p>
+    {% endif %}
+{% endif %}
+{% endblock %}

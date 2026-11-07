@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+
+{% block title %}CineFlix · {{ movie.title }}{% endblock %}
+
+{% block content %}
+<a class="back-link" href="{% url 'catalog:movie_list' %}">‹ Volver a Inicio</a>
+
+<div class="player-wrap">
+    {% if movie.video_source %}
+        {% if movie.is_direct_video %}
+            <video class="player" controls autoplay playsinline poster="{% if movie.poster %}{{ movie.poster.url }}{% endif %}">
+                <source src="{{ movie.video_source }}">
+                Tu navegador no soporta la reproducción de video.
+            </video>
+        {% else %}
+            <iframe class="player" src="{{ movie.video_source }}" frameborder="0"
+                    allow="autoplay; fullscreen; encrypted-media" allowfullscreen></iframe>
+        {% endif %}
+    {% else %}
+        <div class="player placeholder">Aún no hay un video disponible para esta película.</div>
+    {% endif %}
+</div>
+
+<article class="detail">
+    <div class="detail-main">
+        <h1>{{ movie.title }}</h1>
+        <div class="detail-meta">
+            {% if movie.rating %}<span class="match">★ {{ movie.rating }}</span>{% endif %}
+            {% if movie.release_year %}<span>{{ movie.release_year }}</span>{% endif %}
+            {% if movie.duration_minutes %}<span>{{ movie.duration_minutes }} min</span>{% endif %}
+            <span class="hd">HD</span>
+            <span>{{ movie.views }} reproducciones</span>
+        </div>
+        <div class="detail-genres">
+            {% for genre in movie.genres.all %}
+                <a href="{% url 'catalog:movie_list' %}?genre={{ genre.slug }}">{{ genre.name }}</a>
+            {% endfor %}
+        </div>
+        <p class="synopsis">{{ movie.synopsis|default:"Sin sinopsis disponible." }}</p>
+    </div>
+
+    {% if movie.poster %}
+    <aside class="detail-side">
+        <img src="{{ movie.poster.url }}" alt="{{ movie.title }}">
+    </aside>
+    {% endif %}
+</article>
+
+{% if related %}
+<section class="row-wrap row-wrap--related">
+    <h2 class="row-title">Títulos similares</h2>
+    <button class="row-arrow left" aria-label="Anterior">‹</button>
+    <div class="row-track">
+        {% for item in related %}
+        <a class="tile" href="{{ item.get_absolute_url }}">
+            <div class="tile-poster">
+                {% if item.poster %}
+                    <img src="{{ item.poster.url }}" alt="{{ item.title }}" loading="lazy">
+                {% else %}
+                    <div class="no-poster">{{ item.title|slice:":1" }}</div>
+                {% endif %}
+            </div>
+            <div class="tile-info">
+                <h3>{{ item.title }}</h3>
+                <div class="tile-meta">
+                    {% if item.rating %}<span class="match">★ {{ item.rating }}</span>{% endif %}
+                    {% if item.release_year %}<span>{{ item.release_year }}</span>{% endif %}
+                </div>
+                <span class="tile-play">▶ Reproducir</span>
+            </div>
+        </a>
+        {% endfor %}
+    </div>
+    <button class="row-arrow right" aria-label="Siguiente">›</button>
+</section>
+{% endif %}
+{% endblock %}

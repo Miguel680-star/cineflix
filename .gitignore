@@ -1,0 +1,24 @@
+# Entorno virtual de Python
+.venv/
+venv/
+env/
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+
+# Django
+db.sqlite3
+db.sqlite3-journal
+staticfiles/
+media/
+*.log
+
+# Secretos y configuración local (no subir nunca)
+.env
+
+# Editores / sistema
+.vscode/
+.idea/
+.DS_Store

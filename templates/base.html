@@ -1,0 +1,108 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}CineFlix{% endblock %}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body class="{% block body_class %}{% endblock %}">
+    <header class="navbar" id="navbar">
+        <div class="nav-left">
+            <a href="{% url 'catalog:movie_list' %}" class="brand">CINEFLIX</a>
+            <nav class="nav-links">
+                <a href="{% url 'catalog:movie_list' %}">Inicio</a>
+                <a href="{% url 'catalog:movie_list' %}?genre=accion">Acción</a>
+                <a href="{% url 'catalog:movie_list' %}?genre=animacion">Animación</a>
+                <a href="{% url 'catalog:movie_list' %}?genre=ciencia-ficcion">Ciencia ficción</a>
+                <a href="{% url 'catalog:movie_list' %}?genre=fantasia">Fantasía</a>
+            </nav>
+        </div>
+        <div class="nav-right">
+            <form class="search" action="{% url 'catalog:movie_list' %}" method="get" role="search">
+                <button type="submit" class="search-btn" aria-label="Buscar">
+                    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="11" cy="11" r="7"></circle><line x1="21" y1="21" x2="16.5" y2="16.5"></line>
+                    </svg>
+                </button>
+                <input type="search" name="q" id="searchInput" placeholder="Títulos, géneros…" value="{{ search|default:'' }}">
+            </form>
+
+            <a class="vip-link" href="{% url 'billing:plans' %}">
+                {% if user.is_authenticated and user.subscription.is_vip %}★ VIP{% else %}Hazte VIP{% endif %}
+            </a>
+
+            {% if user.is_authenticated %}
+                <a class="nav-user" href="{% url 'billing:account' %}">
+                    {% if user.subscription.is_vip %}<span class="vip-dot" title="Eres VIP"></span>{% endif %}
+                    {{ user.username }}
+                </a>
+                <form method="post" action="{% url 'logout' %}" class="logout-form">
+                    {% csrf_token %}
+                    <button type="submit" class="link-btn">Salir</button>
+                </form>
+            {% else %}
+                <a class="nav-user" href="{% url 'login' %}">Iniciar sesión</a>
+                <a class="nav-btn" href="{% url 'accounts:register' %}">Registrarse</a>
+            {% endif %}
+
+            <a class="admin-link" href="/admin/" title="Administración">Admin</a>
+        </div>
+    </header>
+
+    {% if messages %}
+    <div class="messages">
+        {% for message in messages %}<div class="msg {{ message.tags }}">{{ message }}</div>{% endfor %}
+    </div>
+    {% endif %}
+
+    {% block billboard %}{% endblock %}
+
+    <main class="{% block main_class %}main{% endblock %}">
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <p class="footer-links">
+                <a href="{% url 'catalog:movie_list' %}">Inicio</a>
+                <a href="/admin/">Administración</a>
+                <a href="/api/">API</a>
+            </p>
+            <p>Creador oficial: Migue Peña</p>
+        </div>
+    </footer>
+
+    <script>
+        // Navbar: fondo sólido al hacer scroll
+        const nav = document.getElementById('navbar');
+        const onScroll = () => nav.classList.toggle('scrolled', window.scrollY > 40);
+        window.addEventListener('scroll', onScroll);
+        onScroll();
+
+        // Carruseles: desplazamiento horizontal con los botones ‹ ›
+        document.querySelectorAll('.row-wrap').forEach((wrap) => {
+            const track = wrap.querySelector('.row-track');
+            const left = wrap.querySelector('.row-arrow.left');
+            const right = wrap.querySelector('.row-arrow.right');
+            const step = () => track.clientWidth * 0.9;
+            left.addEventListener('click', () => track.scrollBy({ left: -step(), behavior: 'smooth' }));
+            right.addEventListener('click', () => track.scrollBy({ left: step(), behavior: 'smooth' }));
+        });
+
+        // Mostrar/ocultar el buscador al hacer clic en la lupa
+        const searchForm = document.querySelector('.search');
+        const searchInput = document.getElementById('searchInput');
+        searchForm.querySelector('.search-btn').addEventListener('click', (e) => {
+            if (!searchForm.classList.contains('open') && !searchInput.value) {
+                e.preventDefault();
+                searchForm.classList.add('open');
+                searchInput.focus();
+            }
+        });
+        if (searchInput.value) searchForm.classList.add('open');
+    </script>
+</body>
+</html>

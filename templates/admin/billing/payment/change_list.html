@@ -1,0 +1,14 @@
+{% extends "admin/change_list.html" %}
+
+{% block content_title %}
+<h1>{{ title }}</h1>
+{% endblock %}
+
+{% block result_list %}
+<div class="module" style="margin-bottom:16px;padding:16px;background:#141414;border-left:4px solid #e50914;color:#fff;border-radius:4px;">
+    <div style="font-size:.8rem;letter-spacing:.5px;text-transform:uppercase;color:#b3b3b3;">Ingresos (pagos completados)</div>
+    <div style="font-size:1.8rem;font-weight:800;margin-top:4px;">{{ revenue_total|floatformat:2 }} {{ revenue_currency|default:"EUR" }}</div>
+    <div style="color:#b3b3b3;margin-top:4px;">{{ revenue_count }} pago(s) confirmado(s)</div>
+</div>
+{{ block.super }}
+{% endblock %}

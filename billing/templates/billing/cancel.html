@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block title %}CineFlix · Pago cancelado{% endblock %}
+
+{% block content %}
+<div class="result-wrap">
+    <div class="result-icon">😕</div>
+    <h1>Pago cancelado</h1>
+    <p>No se ha realizado ningún cargo. Puedes intentarlo de nuevo cuando quieras.</p>
+    <a class="btn-secondary" href="{% url 'billing:plans' %}">Ver planes VIP</a>
+</div>
+{% endblock %}

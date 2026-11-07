@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block title %}CineFlix · Crear cuenta{% endblock %}
+
+{% block content %}
+<div class="auth-wrap">
+    <div class="card-panel">
+        <h1>Crear cuenta</h1>
+        <p class="sub">Regístrate gratis y luego hazte VIP si quieres.</p>
+
+        <form method="post">
+            {% csrf_token %}
+            {% if form.non_field_errors %}
+                <div class="form-errors">{{ form.non_field_errors }}</div>
+            {% endif %}
+
+            <div class="form-row">
+                <label for="{{ form.username.id_for_label }}">Usuario</label>
+                {{ form.username }}
+                {% if form.username.errors %}<div class="form-errors">{{ form.username.errors }}</div>{% endif %}
+            </div>
+            <div class="form-row">
+                <label for="{{ form.password1.id_for_label }}">Contraseña</label>
+                {{ form.password1 }}
+                <div class="helptext">{{ form.password1.help_text|safe }}</div>
+                {% if form.password1.errors %}<div class="form-errors">{{ form.password1.errors }}</div>{% endif %}
+            </div>
+            <div class="form-row">
+                <label for="{{ form.password2.id_for_label }}">Repite la contraseña</label>
+                {{ form.password2 }}
+                {% if form.password2.errors %}<div class="form-errors">{{ form.password2.errors }}</div>{% endif %}
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="btn-vip">Crear cuenta</button>
+            </div>
+        </form>
+
+        <p class="form-foot">
+            ¿Ya tienes cuenta? <a href="{% url 'login' %}">Inicia sesión</a>
+        </p>
+    </div>
+</div>
+{% endblock %}

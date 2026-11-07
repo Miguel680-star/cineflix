@@ -1,0 +1,30 @@
+{% extends "admin/base.html" %}
+{% load i18n static %}
+
+{% block title %}{{ title }} | CineFlix Admin{% endblock %}
+
+{% block extrastyle %}
+{{ block.super }}
+<link rel="stylesheet" href="{% static 'css/admin_theme.css' %}">
+{% endblock %}
+
+{% block extrahead %}
+{{ block.super }}
+<!-- PWA: permite instalar el panel como app en el móvil (iPhone/Android) -->
+<link rel="manifest" href="{% static 'manifest.webmanifest' %}">
+<link rel="apple-touch-icon" href="{% static 'img/apple-touch-icon.png' %}">
+<link rel="icon" type="image/png" href="{% static 'img/favicon-32.png' %}">
+<meta name="theme-color" content="#e50914">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="CineFlix">
+{% endblock %}
+
+{% block branding %}
+<div id="site-name">
+    <a href="{% url 'admin:index' %}">CINEFLIX <span style="font-weight:400;opacity:.7;">· Administración</span></a>
+</div>
+{% endblock %}
+
+{% block nav-global %}{% endblock %}

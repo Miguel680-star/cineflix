@@ -1,0 +1,41 @@
+# Blueprint de Render: permite desplegar CineFlix con un par de clics.
+# https://render.com/docs/blueprint-spec
+services:
+  - type: web
+    name: cineflix
+    runtime: python
+    plan: free
+    region: frankfurt
+    buildCommand: "./build.sh"
+    startCommand: "gunicorn cineflix.wsgi:application"
+    envVars:
+      - key: PYTHON_VERSION
+        value: "3.12.6"
+      - key: DEBUG
+        value: "False"
+      - key: SECRET_KEY
+        generateValue: true
+      - key: WEB_CONCURRENCY
+        value: "2"
+
+      # Usuario administrador del panel (usuario: admin)
+      - key: DJANGO_SUPERUSER_USERNAME
+        value: "admin"
+      # Render te pedirá esta variable al crear el servicio: escribe miguel1234
+      - key: DJANGO_SUPERUSER_PASSWORD
+        sync: false
+      - key: DJANGO_SUPERUSER_EMAIL
+        value: "ninopens@gmail.com"
+
+      # Cobros: pega tus claves de Stripe en el panel de Render.
+      # Si se dejan vacías, la app funciona en MODO DEMO (pagos simulados).
+      - key: STRIPE_SECRET_KEY
+        sync: false
+      - key: STRIPE_PUBLISHABLE_KEY
+        sync: false
+      - key: STRIPE_WEBHOOK_SECRET
+        sync: false
+      - key: STRIPE_CURRENCY
+        value: "eur"
+      - key: STRIPE_ACCOUNT_EMAIL
+        value: "ninopens@gmail.com"

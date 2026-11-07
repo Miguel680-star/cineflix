@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block title %}CineFlix · Pago completado{% endblock %}
+
+{% block content %}
+<div class="result-wrap">
+    {% if error %}
+        <div class="result-icon">⚠️</div>
+        <h1>No pudimos confirmar el pago</h1>
+        <p>{{ error }}</p>
+        <a class="btn-secondary" href="{% url 'billing:plans' %}">Volver a los planes</a>
+    {% else %}
+        <div class="result-icon">🎉</div>
+        <h1>¡Ya eres VIP!</h1>
+        <p>
+            Tu suscripción está activa
+            {% if subscription and subscription.current_period_end %}
+                hasta el {{ subscription.current_period_end|date:"d/m/Y" }}
+            {% endif %}.
+            Disfruta de todas las ventajas.
+        </p>
+        <a class="btn-secondary" href="{% url 'catalog:movie_list' %}">Ir al catálogo</a>
+        <a class="btn-secondary" style="background:transparent;color:#fff;border:1px solid #444;"
+           href="{% url 'billing:account' %}">Mi cuenta</a>
+    {% endif %}
+</div>
+{% endblock %}

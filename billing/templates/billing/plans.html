@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block title %}CineFlix · Hazte VIP{% endblock %}
+
+{% block content %}
+<div class="page-wrap">
+    <div class="page-head">
+        <h1>Hazte VIP</h1>
+        <p>Disfruta de ventajas exclusivas. Pago seguro con tarjeta de crédito.</p>
+    </div>
+
+    {% if demo_mode %}
+    <div class="demo-banner">
+        Modo demo activo: el pago es <strong>simulado</strong>, no se realiza ningún cobro real.
+        Para pagos reales configura las claves de Stripe.
+    </div>
+    {% endif %}
+
+    {% if current and current.is_vip %}
+    <div class="demo-banner" style="background:rgba(70,211,105,.12);border-color:rgba(70,211,105,.5);color:#46d369;">
+        Ya eres VIP. Tu suscripción es válida hasta {{ current.current_period_end|date:"d/m/Y" }}.
+        <a href="{% url 'billing:account' %}" style="color:#fff;text-decoration:underline;">Ver mi cuenta</a>
+    </div>
+    {% endif %}
+
+    <div class="plans-grid">
+        {% for plan in plans %}
+        <div class="plan-card {% if plan.id == featured_id %}featured{% endif %}">
+            {% if plan.id == featured_id %}<span class="plan-badge">Más popular</span>{% endif %}
+            <h2>{{ plan.name }}</h2>
+            <p class="plan-desc">{{ plan.description }}</p>
+            <div class="plan-price">{{ plan.price }} <span>{{ plan.currency }} / {{ plan.interval_days }} días</span></div>
+
+            <ul class="plan-features">
+                {% for feature in plan.feature_list %}<li>{{ feature }}</li>{% endfor %}
+            </ul>
+
+            {% if current and current.is_vip and current.plan_id == plan.id %}
+                <span class="btn-vip current">Plan actual</span>
+            {% else %}
+                <a class="btn-vip" href="{% url 'billing:checkout' plan.slug %}">
+                    Pagar con tarjeta
+                </a>
+            {% endif %}
+        </div>
+        {% empty %}
+        <p class="empty">Todavía no hay planes disponibles.</p>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

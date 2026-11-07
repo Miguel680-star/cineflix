@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block title %}CineFlix · Iniciar sesión{% endblock %}
+
+{% block content %}
+<div class="auth-wrap">
+    <div class="card-panel">
+        <h1>Iniciar sesión</h1>
+        <p class="sub">Accede a tu cuenta CineFlix.</p>
+
+        <form method="post">
+            {% csrf_token %}
+            {% if form.non_field_errors %}
+                <div class="form-errors">{{ form.non_field_errors }}</div>
+            {% endif %}
+            <div class="form-row">
+                <label for="{{ form.username.id_for_label }}">Usuario</label>
+                {{ form.username }}
+                {% if form.username.errors %}<div class="form-errors">{{ form.username.errors }}</div>{% endif %}
+            </div>
+            <div class="form-row">
+                <label for="{{ form.password.id_for_label }}">Contraseña</label>
+                {{ form.password }}
+                {% if form.password.errors %}<div class="form-errors">{{ form.password.errors }}</div>{% endif %}
+            </div>
+            <input type="hidden" name="next" value="{{ next }}">
+            <div class="form-actions">
+                <button type="submit" class="btn-vip">Entrar</button>
+            </div>
+        </form>
+
+        <p class="form-foot">
+            ¿No tienes cuenta? <a href="{% url 'accounts:register' %}">Regístrate</a>
+        </p>
+    </div>
+</div>
+{% endblock %}
